@@ -40,7 +40,7 @@
 		exit;
 	}
 	$str = md5(md5(md5($passwd)."abc")."acd");
-	$sql2 = "INSERT INTO user(user,passwd) VALUES('{$username}','{$str}')";
+	$sql2 = "INSERT INTO user(user,passwd,nickname,userImg) VALUES('{$username}','{$str}','{$username}','user/img/untitled.png')";
 	$res2 = mysqli_query($link,$sql2);
 	if(!$res2){
 		$responseData['code'] = 5;

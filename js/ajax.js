@@ -48,7 +48,7 @@ function $ajax({
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
 				if (success) {
-					success(xhr.responseText,xhr);
+					success(xhr.responseText);
 				}
 			} else {
 				if (error) {

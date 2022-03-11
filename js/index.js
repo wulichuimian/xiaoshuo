@@ -21,10 +21,10 @@ function header() {
 //创建nev
 function nev() {
 	var nevHref = ["index.html", "category.html", "free.html", "bookcase.html"];
-	$("#nev").html(
+	$(".nev").html(
 		'<ul><li id="boutique_tab" class="cur">精选</li><li id="category_tab">分类</li><li id="recommend_tab">免费</li><li id="bookcase_tab">书架</li></ul>'
 		);
-	$("#nev").find("li").each(function(index, element) {
+	$(".nev").find("li").each(function(index, element) {
 		$(this).click(function() {
 			window.location.href = nevHref[index];
 		});
@@ -34,16 +34,18 @@ function nev() {
 //创建article
 //创建article里select-nev的内容
 function articleNev() {
-	let artText = ["男生", "女生", "完结", "排行"];
+	let artText = ["男频", "女频", "完结", "排行"];
 	let imgSrc = ["img/23bf9f64bfc941939d077f4aa5358abb.png", "img/edd6d5f39d3544f2a799e50c59858f3c.png",
 		"img/2a52bc621ad0411eb0b768f1f24997c7.png", "img/b6eaec072e58414c97252a0ca8f8f08c.png"
 	];
 	let art = document.getElementById("article");
 	let str = '';
 	for (let j = 0; j < 4; j++) {
-		str += `<li>
+		str += `<li class="a${j}">
+					<a href="secondType.html?secondType=${artText[j]}">
 					<img src="${imgSrc[j]}" alt="">
 					<p>${artText[j]}</p>
+					</a>
 				</li>`;
 	}
 	art.innerHTML += `<section class="select-nev">
@@ -58,9 +60,8 @@ function articleText() {
 	$ajax({
 		method: "post",
 		url: "getBooks.php",
-		success: function(resul, date) {
+		success: function(resul) {
 			var arr = JSON.parse(resul);
-			console.log(date);
 			for (let i = 0; i < arr.length; i++) {
 				art.innerHTML += `<section class="select-text">
 						<ul>
@@ -81,18 +82,22 @@ function articleText() {
 		error: function(mag) {
 			console.log(mag);
 		}
-	})
+	});
 }
 
 //创建footer
 function footer() {
 	//footer-nev
 	var footerText = ["精选", "分类", "免费", "男频", "女频"]
-	var footerHref = ["index.html", "category.html", "free.html", "#"];
-	let footer = document.getElementById("footer");
+	var footerHref = ["index.html", "category.html", "free.html", "secondType.html","secondType.html"];
+	let footer = document.querySelector("footer");
 	let str = '';
 	for (let j = 0; j < 5; j++) {
-		str += `<li><a href="${footerHref[j]}">${footerText[j]}</a></li>`;
+		if(j>=3){
+			str += `<li><a href="${footerHref[j]}?secondType=${footerText[j]}">${footerText[j]}</a></li>`;
+		}else{
+			str += `<li><a href="${footerHref[j]}">${footerText[j]}</a></li>`;
+		}
 	}
 	footer.innerHTML += `<ul>${str}<ul>`;
 
@@ -121,7 +126,7 @@ function section(Categories,arr) {
 	let art = document.getElementById("article");
 	let str = "";
 	for (let i = 0; i <= arr.length - 1; i++) {
-		str += `<li>
+		str += `<li id="a${arr[i].id}">
 					<img src="${arr[i].src}" alt="">
 					<div class="text">
 						<div class="title">${arr[i].title}</div>

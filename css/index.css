@@ -84,7 +84,7 @@ article{
 }
 
 
-.select-nev ul li{
+.select-nev ul li a{
 	display: flex;
 	flex-direction: column;
 	/* justify-content: center; */

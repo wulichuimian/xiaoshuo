@@ -32,16 +32,16 @@
 				//设置头部名称
 				let title = document.querySelector("header").children[1];
 				let search = window.location.search;
-				let classification = valueAndName(search,"classification");
-				title.innerHTML = classification;
+				let secondType = valueAndName(search,"secondType");
+				title.innerHTML = secondType;
 				
 				let art = document.querySelector("article");
 				//插入符合条件的书籍
 				$ajax({
 					method: "post",
-					url: "fantasyBook.php",
+					url: "secondType.php",
 					data:{
-						classification:classification
+						secondType:secondType
 					},
 					success: function(resul) {
 						var arr = JSON.parse(resul);
