@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>小说阅读</title>
+		<link rel="stylesheet" type="text/css" href="css/normalize.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/category.css"/>
+		<script src="js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/index.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function() {
+				header();
+				nev();
+				footer();
+				
+				category("男生分类");
+				category("女生分类");
+				category("出版分类");
+				var search = document.getElementsByClassName("search");
+				console.log(search);
+			}
+			function category(category){
+				$.ajaxSettings.async= false;
+				$.ajax({
+					method: "post",
+					url: "category.php",
+					data:{
+						category:category
+					},
+					// asynch:false,
+					success: function(resul) {
+						let obj = JSON.parse(resul);
+						section(category,obj);
+					},
+					error: function(mag) {
+						console.log(mag);
+					}
+				});
+			}
+		</script>
+		<header id="header"></header>
+		<div class="nev" id="nev"></div>
+		<article id="article">
+			
+		</article>
+		<footer id="footer"></footer>
+	</body>
+</html>

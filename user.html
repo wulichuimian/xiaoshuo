@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/login.css">
+		<script src="js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/cookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/index.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+		<style type="text/css">
+			footer {
+				border-radius: 0;
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+
+			article {
+				display: flex;
+				align-items: center;
+				padding: 30px;
+				height: 160px;
+				border-top: 1px solid #eee;
+
+			}
+
+			.userId {
+				color: #a89999;
+				text-align: center;
+			}
+
+			.userImg {
+				width: 100px;
+				height: 100px;
+				overflow: hidden;
+				border-radius: 100px;
+			}
+
+			.nickname {
+				margin: 5px 0 10px 0 !important;
+				color: #333 !important;
+			}
+
+			.userUl ul li {
+				display: flex;
+				/* justify-content: center; */
+				align-items: center;
+				height: 60px;
+				background-color: #fff;
+			}
+
+			.userUl ul li span {
+				flex: 1;
+				padding: 20px 0;
+				display: block;
+				height: 19px;
+				border-bottom: 1px solid #a89999;
+			}
+
+			.userUl ul li:last-child span {
+				border: 0;
+			}
+
+			.userUl ul li i {
+				padding: 0 20px;
+				font-size: 30px;
+			}
+
+			.exit {
+				display: flex;
+				justify-content: center;
+				padding: 20px 0;
+				height: 64px;
+				background-color: #fff;
+			}
+
+			.exit>div {
+				width: 250px;
+				height: 60px;
+				color: #fc7751;
+				border: 2px solid #fc7751;
+				border-radius: 5px;
+				text-align: center;
+				line-height: 60px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function() {
+				button1();
+				footer();
+				let name = getCookie("username");
+				let userId = document.querySelector(".userId");
+				let nickname = document.querySelector(".nickname");
+				let userImg = document.querySelector(".userImg");
+				let exit = document.querySelector(".exit");
+				// console.log(id);
+				exit.onclick = function(){
+					removeCookie("username");
+					window.location.href = "index.html";
+				}
+				$ajax({
+					method: "post",
+					url: "user.php",
+					data: {
+						username: name,
+					},
+					success: function(resul) {
+						var obj = JSON.parse(resul);
+						// console.log(obj.id);
+						userId.innerHTML = "ID:  " + obj.id;
+						if (!obj.userImg) {
+							userImg.children[0].src = obj.userImg;
+						}
+						nickname.innerHTML = obj.nickname;
+					},
+					error: function(mag) {
+						console.log(mag);
+					}
+				})
+			}
+		</script>
+		<header>
+			<div class="return">&#xe620;</div>
+			<div id="">
+				我的
+			</div>
+			<div class="home">&#xe649;</div>
+		</header>
+		<article>
+			<div class="userImg">
+				<img src="user/img/untitled.png">
+			</div>
+			<div class="nickname"></div>
+			<div class="userId"></div>
+		</article>
+		<div class="userUl">
+			<ul>
+				<li><i>&#xe936;</i><span>我的账号</span></li>
+				<li><i>&#xe936;</i><span>包月会员</span></li>
+				<li><i>&#xe936;</i><span>充值记录</span></li>
+				<li><i>&#xe936;</i><span>消费记录</span></li>
+				<li><i>&#xe936;</i><span>我的书架</span></li>
+				<li><i>&#xe936;</i><span>自动购买下一章</span></li>
+			</ul>
+		</div>
+		<div class="exit">
+			<div>退出登录</div>
+		</div>
+		<footer id="footer"></footer>
+	</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>小说阅读</title>
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<script src="js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/cookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/index.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/checked.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			article {
+				background-color: #FFFFFF;
+
+			}
+
+			.bookscase {
+				margin: 20px auto;
+				width: 90%;
+				height: 44px;
+				border: 2px solid #fc6e51;
+				border-radius: 25px;
+				font-size: 20px;
+				line-height: 44px;
+				text-align: center;
+			}
+
+			article section {
+				padding-left: 40px;
+			}
+
+			.editor {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-left: 40px;
+				padding: 10px 0;
+				width: 85%;
+			}
+
+			.editor>div:first-child {
+				display: flex;
+				align-items: center;
+			}
+
+			.editor>div>input {
+				margin-right: 20px;
+			}
+
+			input[type='checkbox'] {
+				display: none;
+				margin-right: 20px;
+				width: 20px;
+				height: 20px;
+			}
+
+			.select-text ul {
+				display: flex;
+				align-items: center;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function() {
+				header();
+				nev();
+				footer();
+				let sec = document.querySelector(".section1");
+				let editor = document.querySelector(".editor");
+				//给编辑按钮绑定编辑事件
+				editor.children[1].onclick = function() {
+					//获取所有复选框
+					let inp = document.querySelectorAll("input[type='checkbox']");
+					//给所有复选框设置点击事件
+					checked(inp);
+					if (this.children[0].style.display == "block" || this.children[0].style.display == "") {
+						for (let i = 0; i < inp.length; i++) {
+							inp[i].checked = false;
+							inp[i].style.display = "block";
+							this.children[0].style.display = "none";
+							this.children[1].style.display = "block";
+
+						}
+					} else {
+						let username = getCookie("username");
+						for (let i = 1; i < inp.length; i++){
+							//点击删除时把被勾选的书籍删除
+							if(inp[i].checked == true){
+								bookId = inp[i].parentNode.nextElementSibling.children[2].innerHTML;
+								$ajax({
+									method: "post",
+									url: "deleteBook.php",
+									data: {
+										username:username,
+										id:bookId
+									},
+									success: function(resul) {
+										var obj = JSON.parse(resul);
+										console.log(obj);
+									},
+									error: function(mag) {
+										console.log(mag);
+									}
+								});
+								console.log(bookId);
+								sec.removeChild(inp[i].parentNode.parentNode.parentNode);
+							}
+						}
+						for (let i = 0; i < inp.length; i++) {
+							inp[i].style.display = "none";
+							this.children[1].style.display = "none";
+							this.children[0].style.display = "block";
+						}
+					}
+
+				}
+				//获取用户名
+				let username = getCookie("username");
+				if(username == undefined){
+					window.location.href = "login.html";
+				}else{
+					//把本用户加入书架的书通过数据库加载进来
+						$ajax({
+							method: "post",
+							url: "bookcase.php",
+							data: {
+								username: username,
+							},
+							success: function(resul) {
+								var arr = JSON.parse(resul);
+								console.log(arr);
+								editor.children[0].children[1].innerHTML = arr.length;
+								for (let i = 0; i < arr.length; i++) {
+									sec.innerHTML += `<section class="select-text">
+						<ul>
+							<li>
+								<input type="checkbox">
+							</li>
+							<li>
+								<img src=${arr[i].imgUrl} loading='lazy'>
+								<div class='text'>
+									<h2>
+										<a href="booksIntroduce.html?id=${arr[i].id}">${arr[i].title}</a>
+									</h2>
+									<p> 作者:&nbsp;&nbsp;&nbsp;${arr[i].author}</p>
+									<br/>
+									<p> 类型:&nbsp;&nbsp;&nbsp;${arr[i].type}</p>
+									<br/>
+									<p> 已完结</p>
+								</div>
+								<div class="idNone">${arr[i].id}</div>
+							</li>
+						</ul>
+					</section>`
+								}
+							},
+							error: function(mag) {
+								console.log(mag);
+							}
+						});
+				}
+			}
+		</script>
+		<header id="header"></header>
+		<div class="nev" id="nev"></div>
+		<article id="article">
+			<div class="bookscase">我的书架</div>
+			<div class="editor">
+				<div><input type="checkbox">共<span></span>本</div>
+				<div class="btn">
+					<span>编辑</span>
+					<span style="display: none;">删除</span>
+				</div>
+			</div>
+			<div class="section1">
+
+			</div>
+		</article>
+		<div class="ious"></div>
+		<footer id="footer"></footer>
+	</body>
+</html>

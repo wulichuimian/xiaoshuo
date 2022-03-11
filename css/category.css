@@ -1,0 +1,36 @@
+.nev ul{
+	border-radius: 0 0 10px 10px ;
+}
+.tit{
+	margin-top: 20px;
+	padding-left: 20px;
+	height: 35px;
+	font-size: 20px;
+	line-height: 35px;
+	/* text-align: center; */
+	border-left: 10px solid #666690;
+	border-right: 10px solid #666690;
+	border-radius: 5px;
+	background-color: #FFFFFF;
+	
+}
+article .tit:nth-child(3n){
+	margin-top: 0px;
+}
+.category{
+	margin:0 10px;
+}
+.category ul li {
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	border-top:1px solid #F8F8F9;
+	background-color: #FFFFFF;
+}
+
+.desc{
+	color: #999999;
+}
+.title{
+	font-size: 20px;
+}

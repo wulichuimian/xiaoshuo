@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>小说阅读</title>
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/search.css" />
+		<script src="js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/valueAndName.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./js/index.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.select-text {
+				padding-left: 40px;
+			}
+
+			.select-text ul li img {
+				height: 150px;
+				width: auto;
+			}
+			
+			.art{
+				height: 490px;
+				line-height: 490px;
+				font-size: 20px;
+				text-align: center;
+			}
+			
+			.error span{
+				color: #FC6E51;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function() {
+				//创建footer；
+				footer();
+				//点击返回上一个浏览记录；
+				$("header").children().eq(0).click(function() {
+					window.history.go(-1);
+				})
+				//获取url；
+				let search = window.location.search;
+				//获取url里的search；
+				let search2 = valueAndName(search, "search");
+				
+				let art = document.querySelector("article");
+				//把获取到的search添加到搜索框的内容里；
+				$(".inSearch").val(search2);
+				//点击搜索按钮，跳转到search2.html页面；
+				$("header").children("div").click(function(){
+					window.location.href = `search2.html?search=${search2}`;
+				});
+				
+				// 进入页面就把搜索提示栏隐藏；
+				$(".search1").children().eq(0).css("display", "none");
+				//失去焦点就把搜索提示栏隐藏，把搜到的书本显示
+				if ($(".inSearch").blur(function() {
+						art.style.display = 'block';
+						$(".search1").children().eq(0).css("display", "none");
+					}))
+					//获得焦点就把搜索提示栏显示，把搜到的书本隐藏；并设置键盘事件；
+					if ($(".inSearch").focus(function() {
+							art.style.display = 'none';
+							$(".search1").children().eq(0).css("display", "block");
+							$(this).keyup(function(e){
+								//获取要搜索的内容；
+								search = $(this).val();
+								//如果搜索栏不为空就进行搜索；
+								if(search){
+									//当按下回车键时跳转到search2.html页面；
+									if(e.keyCode == 13){
+										window.location.href = `search2.html?search=${search}`;
+									}
+									$ajax({
+										method: "post",
+										url: "search.php",
+										data: {
+											search:search,
+										},
+										success: function(resul) {
+											var obj = JSON.parse(resul);
+											console.log(obj);
+											var str = '';
+											for(let i =0;i<obj.length;i++){
+												//这是搜索提示栏的内容；
+												str += `<li>
+													<i>&#xe656;</i><a href="booksIntroduce.html?id=${obj[i].id}&title=${obj[i].title}">${obj[i].title}</a>
+												</li>`;
+											}
+											//把搜索提示栏插入到页面中去；
+											$(".search1").children().eq(0).html(str);
+										},
+										error: function(mag) {
+											console.log(mag);
+										}
+									});
+								}
+							})
+						}))
+						// 进入页面就进行查找，并把查找到的书籍显示到页面；
+						$ajax({
+							method: "post",
+							url: "search.php",
+							data: {
+								search: search2,
+							},
+							success: function(resul) {
+								var arr = JSON.parse(resul);
+								if (arr.length == 0) {
+									art.children[0].children[0].innerHTML = search2;
+									art.className = "art";
+								} else {
+									var str = '';
+									console.log(arr);
+									art.innerHTML = '';
+									for (let i = 0; i < arr.length; i++) {
+										//把搜索到的书本加入到页面中；
+										art.innerHTML += `<section class="select-text">
+								<ul>
+									<li>
+										<img src=${arr[i].imgUrl} loading='lazy'>
+										<div class='text'>
+											<h2>
+												<a href="booksIntroduce.html?id=${arr[i].id}">${arr[i].title}</a>
+											</h2>
+											<p>${arr[i].Introduction}</p>
+										</div>
+										<div class="idNone">${arr[i].id}</div>
+									</li>
+								</ul>
+							</section>`;
+									}
+									//把搜索提示栏插入到页面中去；
+									$(".search1").children().eq(0).html(str);
+								}
+
+							},
+							error: function(mag) {
+								console.log(mag);
+							}
+						});
+			}
+		</script>
+		<header>
+			<i>&#xe61f;</i>
+			<input type="text" class="inSearch" placeholder="搜索书名、作者、分类">
+			<div style="font-size: 30px;line-height: 25px;">搜索</div>
+		</header>
+		<div class="search1">
+			<ul></ul>
+		</div>
+		<article>
+			<div class="error">抱歉没有找到与<span></span>有关的小说</div>
+		</article>
+		<footer id="footer"></footer>
+	</body>
+</html>

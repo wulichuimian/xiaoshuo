@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/valueAndName.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+		<style type="text/css">
+			body{
+				padding: 30px 20px 0 29px;
+				background-color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload = function(){
+				let p = document.querySelector("p");
+				let search = window.location.search;
+				let title = valueAndName(search,"title");
+				console.log(title);
+					$ajax({
+						method:"post",
+						url:"reading.php",
+						data:{
+							file:title
+						},
+						success:function(resul){
+							var str = JSON.parse(resul);
+							p.innerHTML = str;
+						},
+						error:function(mag){
+							console.log(mag);
+						}
+					});
+			}
+		</script>
+		<p></p>
+	</body>
+</html>
