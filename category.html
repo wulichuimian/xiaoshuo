@@ -20,39 +20,23 @@
 				//创建尾部
 				footer();
 				//创建分类内容
-				category("男生分类");
-				category("女生分类");
-				category("出版分类");
-				let oCategory = document.querySelectorAll(".category");
-				for (let i = 0; i < oCategory.length; i++) {
-					for (let j = 0; j < oCategory[i].children[0].children.length; j++) {
-						oCategory[i].children[0].children[j].onclick = function(){
-							// console.log(this.children[1].children[0].innerHTML);
-							window.location.href = `fantasyBook.html?classification=${this.children[1].children[0].innerHTML}`;
-						}
-					}
-				}
-			}
-
-			function category(category) {
-				$.ajaxSettings.async = false;
-				$.ajax({
+				let arr = ["男生分类","女生分类","出版分类"];
+				$ajax({
 					method: "post",
 					url: "category.php",
 					data: {
-						category: category
+						arr: JSON.stringify(arr)
 					},
-					// asynch:false,
 					success: function(resul) {
 						let obj = JSON.parse(resul);
-						section(category, obj);
-						console.log(obj);
+						for(let i = 0;i<obj.length;i++){
+							section(arr[i], obj[i]);
+						}
 					},
 					error: function(mag) {
 						console.log(mag);
 					}
 				});
-				$.ajaxSettings.async = true;
 			}
 		</script>
 		<header id="header"></header>

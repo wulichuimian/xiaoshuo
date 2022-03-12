@@ -1,6 +1,6 @@
 <?php
 	header("content-type:text/html;charset=utf-8");
-	$category = $_POST["category"];
+	$arr = json_decode($_POST["arr"]);
 	//统一返回格式
 	$responseData = array("code"=> 0,"message"=>"");
 	$link = mysqli_connect("localhost","root","");
@@ -15,14 +15,17 @@
 	//选择数据库
 	mysqli_select_db($link,"xiashuo");
 	//准备sql语句
-	$sql = "select * from {$category}";
-	$res = mysqli_query($link,$sql);
-	$arr = array();
-	while($row = mysqli_fetch_assoc($res)){
-		array_push($arr,$row);
+	$arr2 = array();
+	for($i=0;$i<count($arr);$i++){
+		$sql = "select * from {$arr[$i]}";
+		$res = mysqli_query($link,$sql);
+		$arr1 = array();
+		while($row = mysqli_fetch_assoc($res)){
+			array_push($arr1,$row);
+		}
+		array_push($arr2,$arr1);
 	}
-	
-	echo json_encode($arr);
+	echo json_encode($arr2);
 	//关闭数据库
 	mysqli_close($link);
 ?>

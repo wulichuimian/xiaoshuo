@@ -20,9 +20,8 @@ article .tit:nth-child(3n){
 .category{
 	margin:0 10px;
 }
-.category ul li {
+.category ul li a{
 	display: flex;
-	/* justify-content: center; */
 	align-items: center;
 	border-top:1px solid #F8F8F9;
 	background-color: #FFFFFF;
