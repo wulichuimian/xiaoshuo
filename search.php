@@ -15,7 +15,7 @@
 	//选择数据库
 	mysqli_select_db($link,"xiashuo");
 	//准备sql语句
-	$sql = 'select * from books where title like "%'.$search.'%" or author like "%'.$search.'%" or classification like "%'.$search.'%"';
+	$sql = "select * from books where title like '%{$search}%' or author like '%{$search}%' or classification like '%{$search}%'";
 	
 	$res = mysqli_query($link,$sql);
 	
