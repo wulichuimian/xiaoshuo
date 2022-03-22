@@ -1,2 +1,2 @@
 ## 有用到php，js，ajax，mysql
-## 需要先创建用户
+## 创建用户或者用admin用户，密码也是admin。
