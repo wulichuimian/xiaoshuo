@@ -126,7 +126,7 @@ function section(Categories,arr) {
 	let art = document.getElementById("article");
 	let str = "";
 	for (let i = 0; i <= arr.length - 1; i++) {
-		str += `<li><a href="fantasyBook.html?classification=${arr[i].title}">
+		str += `<li><a href="fantasyBook.html?classification=${encodeURIComponent(arr[i].title)}">
 					<img src="${arr[i].src}" alt="">
 					<div class="text">
 						<div class="title">${arr[i].title}</div>

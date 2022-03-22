@@ -33,7 +33,7 @@
 				let title = document.querySelector("header").children[1];
 				let search = window.location.search;
 				let classification = valueAndName(search,"classification");
-				title.innerHTML = classification;
+				title.innerHTML = decodeURIComponent(classification);
 				
 				let art = document.querySelector("article");
 				//插入符合条件的书籍
