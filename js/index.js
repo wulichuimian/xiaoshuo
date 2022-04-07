@@ -42,7 +42,7 @@ function articleNev() {
 	let str = '';
 	for (let j = 0; j < 4; j++) {
 		str += `<li class="a${j}">
-					<a href="secondType.html?secondType=${artText[j]}">
+					<a href="secondType.html?secondType=${encodeURIComponent(artText[j])}">
 					<img src="${imgSrc[j]}" alt="">
 					<p>${artText[j]}</p>
 					</a>

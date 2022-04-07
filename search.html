@@ -25,6 +25,7 @@
 				footer();
 				//获取要搜索的内容；
 				let search = $(".inSearch").val();
+				search = encodeURIComponent(search);
 				//点击返回上一个浏览记录；
 				$("header").children().eq(0).click(function() {
 					window.history.go(-1);

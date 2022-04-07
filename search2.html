@@ -46,6 +46,7 @@
 				let search = window.location.search;
 				//获取url里的search；
 				let search2 = valueAndName(search, "search");
+				search2 = decodeURIComponent(search2);
 				if(search2 == "%22"){
 					search2 = "\"";
 				}
@@ -54,7 +55,7 @@
 
 				let art = document.querySelector("article");
 				//把获取到的search添加到搜索框的内容里；
-				$(".inSearch").val(search2);
+				$(".inSearch").val(decodeURIComponent(search2));
 				//点击搜索按钮，跳转到search2.html页面；
 				$("header").children("div").click(function() {
 					window.location.href = "search2.html?search="+search2;
